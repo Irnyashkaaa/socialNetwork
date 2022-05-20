@@ -12,6 +12,7 @@ let HeaderContainer = (props) => {
             if (response.data.resultCode === 0) {
                 let {id, email, login} = response.data.data
                 props.setUserData(id, email, login)
+
             }
         })
     })
@@ -21,5 +22,9 @@ let HeaderContainer = (props) => {
         </div>
     )
 }
-let mapStatetoProps = (state) => ({})
+
+let mapStatetoProps = (state) => ({
+    isAuth: state.auth.isAuth,
+    login: state.auth.login
+})
 export default connect (mapStatetoProps, {setUserData}) (HeaderContainer);

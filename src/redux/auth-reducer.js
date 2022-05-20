@@ -8,6 +8,7 @@ let initState = {
     id: null,
     email: null,
     login: null,
+    isAuth: false
 }
 
 export const authReduser = (state = initState, action) => {
@@ -15,7 +16,8 @@ export const authReduser = (state = initState, action) => {
         case SET_USER_DATA: {
             return {
                 ...state,
-                ...action.data
+                ...action,
+                isAuth: true
             }
         }
 

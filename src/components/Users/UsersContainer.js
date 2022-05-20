@@ -18,10 +18,12 @@ class UsersAPIComponent extends React.Component {
     componentDidMount() {
         if (this.props.users.length === 0) {
             this.props.toggleIsFetching(true)
-            axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`).then(response => {
-                this.props.toggleIsFetching(false)
-                this.props.setUsers(response.data.items)
-            })
+            axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`,
+                { withCredentials: true })
+                .then(response => {
+                    this.props.toggleIsFetching(false)
+                    this.props.setUsers(response.data.items)
+                })
         }
 
 
@@ -30,11 +32,13 @@ class UsersAPIComponent extends React.Component {
     updateUsers = (pageNumber) => {
         this.props.setCurrentPage(pageNumber)
         this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`).then(response => {
-            this.props.toggleIsFetching(false)
-            this.props.setUsers(response.data.items)
-            this.props.setTotalUsersCount(response.data.totalCount)
-        })
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`,
+            { withCredentials: true })
+            .then(response => {
+                this.props.toggleIsFetching(false)
+                this.props.setUsers(response.data.items)
+                this.props.setTotalUsersCount(response.data.totalCount)
+            })
     }
 
     render() {
@@ -49,13 +53,13 @@ class UsersAPIComponent extends React.Component {
     }
 }
 
-let UsersContainer = connect (mapStateToProps, {
-        follow: followAC,
-        unfollow: unfollowAC,
-        setUsers: setUsersAC,
-        setCurrentPage: setPagesAC,
-        setTotalUsersCount: setUsersCountAC,
-        toggleIsFetching: toggleIsFetchingAC
-    })(UsersAPIComponent)
+let UsersContainer = connect(mapStateToProps, {
+    follow: followAC,
+    unfollow: unfollowAC,
+    setUsers: setUsersAC,
+    setCurrentPage: setPagesAC,
+    setTotalUsersCount: setUsersCountAC,
+    toggleIsFetching: toggleIsFetchingAC
+})(UsersAPIComponent)
 
 export default UsersContainer;

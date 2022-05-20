@@ -1,4 +1,18 @@
 .item {
     width: 100%;
     background-color: black;
+    display: flex;
+    justify-content: space-between;
+}
+
+.linkToSingup {
+    color: azure;
+    font-weight: 700;
+    font-size: 24px;
+    margin: 0px 10px;
+}
+
+.currentUser {
+    display: flex;
+    align-items: center;
 }

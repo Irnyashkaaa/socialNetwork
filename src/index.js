@@ -18,3 +18,5 @@ export let rerenderDomTree = () => {
     </React.StrictMode>
   );
 }
+
+rerenderDomTree()
