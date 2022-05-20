@@ -1,0 +1,17 @@
+.item {
+    display: flex;
+    margin: 20px;
+    background-color: brown;
+}
+.userName {
+    font-weight: 600;
+}
+.userPost {
+    font-weight: 400;
+}
+.userImage {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 5px;
+}

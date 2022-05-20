@@ -1,0 +1,24 @@
+.userBody {
+    display: flex;
+}
+.user {
+    display: flex;
+    flex-direction: column;
+}
+.photo {
+    width: 100px;
+    border-radius: 50%;
+}
+.location {
+    margin: auto 10px;
+}
+.userInfo {
+    margin: auto 10px;
+}
+.actionPage {
+    background-color: blue;
+}
+
+.displayNoneButton {
+    display: none;
+}

@@ -1,0 +1,17 @@
+.content {
+    display: flex;
+}
+
+.item {
+    margin: 10px 40px;
+    color: blue;
+}
+
+.userName {
+    margin: 10px 0px;
+}
+
+.addMessage {
+    display: flex;
+    flex-direction: column;
+}
