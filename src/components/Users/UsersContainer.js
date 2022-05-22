@@ -1,8 +1,33 @@
 import React from "react";
 import { connect } from "react-redux";
-import { followAC, setPagesAC, setUsersAC, unfollowAC, setUsersCountAC, toggleIsFetchingAC } from "../../redux/users-reducer";
+import { followAC, setPagesAC, setUsersAC, unfollowAC, setUsersCountAC, toggleIsFetchingAC, followingInProgressAC, getUsersThunkCreator, updateUsersThunk, followUserThunk, unfollowUserThunk } from "../../redux/users-reducer";
 import Users from "./Users";
-import * as axios from "axios"
+
+class UsersAPIComponent extends React.Component {
+    componentDidMount() {
+        if (!this.props.users) {
+            this.props.getUsersThunk(this.props.currentPage, this.props.pageSize)
+        }
+    }
+
+    updateUsers = (pageNumber) => {
+        this.props.updateUsersThunk(pageNumber, this.props.pageSize)
+    }
+
+    render() {
+
+        return <Users currentPage={this.props.currentPage}
+            updateUsers={this.updateUsers}
+            users={this.props.users}
+            totalCount={this.props.totalCount}
+            pageSize={this.props.pageSize}
+            loading={this.props.isFetching}
+            progress={this.props.isProgress}
+            followingIsProgress={this.props.followingIsProgress} 
+            followUser={this.props.followUserThunk}
+            unfollowUser={this.props.unfollowUserThunk}/>
+    }
+}
 
 let mapStateToProps = (state) => {
     return {
@@ -11,45 +36,7 @@ let mapStateToProps = (state) => {
         totalCount: state.users.totalCount,
         currentPage: state.users.currentPage,
         isFetching: state.users.isFetching,
-    }
-}
-
-class UsersAPIComponent extends React.Component {
-    componentDidMount() {
-        if (this.props.users.length === 0) {
-            this.props.toggleIsFetching(true)
-            axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`,
-                { withCredentials: true })
-                .then(response => {
-                    this.props.toggleIsFetching(false)
-                    this.props.setUsers(response.data.items)
-                })
-        }
-
-
-    }
-
-    updateUsers = (pageNumber) => {
-        this.props.setCurrentPage(pageNumber)
-        this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`,
-            { withCredentials: true })
-            .then(response => {
-                this.props.toggleIsFetching(false)
-                this.props.setUsers(response.data.items)
-                this.props.setTotalUsersCount(response.data.totalCount)
-            })
-    }
-
-    render() {
-        return <Users currentPage={this.props.currentPage}
-            updateUsers={this.updateUsers}
-            users={this.props.users}
-            follow={this.props.follow}
-            unfollow={this.props.unfollow}
-            totalCount={this.props.totalCount}
-            pageSize={this.props.pageSize}
-            loading={this.props.isFetching} />
+        isProgress: state.users.followingIsProgress,
     }
 }
 
@@ -59,7 +46,12 @@ let UsersContainer = connect(mapStateToProps, {
     setUsers: setUsersAC,
     setCurrentPage: setPagesAC,
     setTotalUsersCount: setUsersCountAC,
-    toggleIsFetching: toggleIsFetchingAC
+    toggleIsFetching: toggleIsFetchingAC,
+    followingIsProgress: followingInProgressAC,
+    getUsersThunk: getUsersThunkCreator,
+    updateUsersThunk: updateUsersThunk,
+    followUserThunk: followUserThunk,
+    unfollowUserThunk: unfollowUserThunk,
 })(UsersAPIComponent)
 
 export default UsersContainer;

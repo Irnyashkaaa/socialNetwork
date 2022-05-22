@@ -5,20 +5,21 @@ import {connect} from 'react-redux'
 
 
 
-let f1 = (state) => {
+let mapStateToProps = (state) => {
     return {
         dialog: state.dialogs.userData,
         message: state.dialogs.messages, 
-        newMessageText: state.dialogs.newMessageText
+        newMessageText: state.dialogs.newMessageText,
+        isAuth: state.auth.isAuth
     }
 }
-let f2 = (dispatch) => {
+let mapDispatchToProps = (dispatch) => {
     return {
         addMessage: () => {dispatch(addMessageActionCreator())},
         newMessage: (text) => {dispatch(newMessageActionCreator(text))}
     }
 }
 
-let DialogsContainer = connect (f1, f2) (Dialogs)
+let DialogsContainer = connect (mapStateToProps, mapDispatchToProps) (Dialogs)
 
 export default DialogsContainer;

@@ -1,33 +1,17 @@
 import * as axios from 'axios';
-import React, { useEffect } from 'react'
+import React, { useEffect} from 'react'
 import { connect } from 'react-redux';
-import { setUserProfile } from '../../redux/profile-reducer';
+import { setUserProfile, getCurrentUserThunk } from '../../redux/profile-reducer';
 import { useParams } from 'react-router-dom';
 import CurrentUser from './Profile'
+import {Navigate} from 'react-router-dom'
+import { WithAuthRedirect } from '../../hoc/AuthRedirect';
+import { compose } from 'redux';
 
-class CurrentUserContainerr extends React.Component {
-    componentDidMount() {
-        axios.get('https://social-network.samuraijs.com/api/1.0/profile/')
-            .then(response => {
-                this.props.setUserProfile(response.data)
-            })
-    }
-
-    render() {
-        return (
-            <div>
-                <div>
-                    {console.log(this.props)}
-                    <CurrentUser {...this.props} profile={this.props.profile} />
-                </div>
-            </div>
-        )
-    }
-
-}
 
 let mapStateToProps = (state) => ({
-    profile: state.profilePage.profile
+    profile: state.profilePage.profile,
+    isAuth: state.auth.isAuth
 })
 
 let CurrentUserContainer = (props) => {
@@ -38,17 +22,21 @@ let CurrentUserContainer = (props) => {
         } else {
             params.id = 2
         }
-        axios.get('https://social-network.samuraijs.com/api/1.0/profile/' + params.id)
-            .then(response => {
-                props.setUserProfile(response.data)
-
-            })
+        props.getCurrentUserThunk(params.id)
+        
     })
+
     return (
+
         <div>
             <CurrentUser {...props} profile={props.profile} />
         </div>
     )
 }
 
-export default connect(mapStateToProps, { setUserProfile })(CurrentUserContainer);
+CurrentUserContainer = WithAuthRedirect(CurrentUserContainer)
+
+export default connect(mapStateToProps, { setUserProfile, getCurrentUserThunk })(CurrentUserContainer);
+
+// export default compose ( connect(mapStateToProps, {setUserProfile, getCurrentUserThunk}, WithAuthRedirect,)
+// ) (CurrentUserContainer)

@@ -1,3 +1,6 @@
+import axios from 'axios'
+import { usersAPI } from '../api/api';
+
 let ADD_POST = 'ADD-POST';
 let NEW_POST = 'NEW-POST';
 let SET_USER_PROFILE = 'SET-USER-PRODILE'
@@ -41,5 +44,15 @@ export const ProfileReducer = (state = initState, action) => {
         }
         default:
             return state;
+    }
+}
+
+export const getCurrentUserThunk = (currentId) => {
+    return (dispatch) => {
+        usersAPI.getCurrentUser(currentId)
+            .then(response => {
+                dispatch(setUserProfile(response.data))
+
+            })
     }
 }

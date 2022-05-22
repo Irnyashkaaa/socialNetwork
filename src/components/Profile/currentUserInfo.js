@@ -3,6 +3,7 @@ import s from './currentUserInfo.module.css'
 import preloaderImg from '../../images/preloader.gif'
 import {useParams} from 'react-router-dom'
 import userDefaultImage from '../../images/user.png'
+import { ProfileStatus } from "./Status"
 
 let CurrentUser = (props) => {
     let imgSrc;
@@ -19,7 +20,7 @@ let CurrentUser = (props) => {
         <div className={s.CurrentUserInfo}>
             <img src={imgSrc} />
             <div className='currentUserDescription'></div>
-
+            <ProfileStatus status='sdf'/>
         </div>)
 }
 
