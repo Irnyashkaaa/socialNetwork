@@ -20,7 +20,7 @@ let CurrentUser = (props) => {
         <div className={s.CurrentUserInfo}>
             <img src={imgSrc} />
             <div className='currentUserDescription'></div>
-            <ProfileStatus status='sdf'/>
+            <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
         </div>)
 }
 

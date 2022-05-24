@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import React, { useEffect} from 'react'
 import { connect } from 'react-redux';
-import { setUserProfile, getCurrentUserThunk } from '../../redux/profile-reducer';
+import { setUserProfile, getCurrentUserThunk, setStatusThunk, updateStatusThunk } from '../../redux/profile-reducer';
 import { useParams } from 'react-router-dom';
 import CurrentUser from './Profile'
 import {Navigate} from 'react-router-dom'
@@ -11,7 +11,8 @@ import { compose } from 'redux';
 
 let mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    status: state.profilePage.status
 })
 
 let CurrentUserContainer = (props) => {
@@ -23,20 +24,23 @@ let CurrentUserContainer = (props) => {
             params.id = 2
         }
         props.getCurrentUserThunk(params.id)
+        props.setStatusThunk(params.id)
         
     })
 
     return (
 
         <div>
-            <CurrentUser {...props} profile={props.profile} />
+            <CurrentUser {...props} profile={props.profile} status={props.status} updateStatus={props.updateStatusThunk} />
         </div>
     )
 }
 
-CurrentUserContainer = WithAuthRedirect(CurrentUserContainer)
+// CurrentUserContainer = WithAuthRedirect(CurrentUserContainer)
 
-export default connect(mapStateToProps, { setUserProfile, getCurrentUserThunk })(CurrentUserContainer);
+// export default connect(mapStateToProps, { setUserProfile, getCurrentUserThunk })(CurrentUserContainer);
 
-// export default compose ( connect(mapStateToProps, {setUserProfile, getCurrentUserThunk}, WithAuthRedirect,)
-// ) (CurrentUserContainer)
+export default compose ( connect(mapStateToProps, {setUserProfile, getCurrentUserThunk, setStatusThunk, updateStatusThunk}, 
+    // WithAuthRedirect
+    )
+) (CurrentUserContainer)

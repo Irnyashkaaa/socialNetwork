@@ -1,13 +1,15 @@
 import axios from 'axios'
-import { usersAPI } from '../api/api';
+import { profileAPI, usersAPI } from '../api/api';
 
 let ADD_POST = 'ADD-POST';
 let NEW_POST = 'NEW-POST';
 let SET_USER_PROFILE = 'SET-USER-PRODILE'
+let SET_STATUS = 'SET-STATUS'
 
 export const addPostActionCreator = () => ({ type: "ADD-POST" });
 export const newPostActionCreator = (text) => ({ type: "NEW-POST", newText: text })
 export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile})
+export const setStatus = (status) => ({type: SET_STATUS, status})
 
 
 let initState = {
@@ -19,7 +21,8 @@ let initState = {
         { name: 'name5', message: "message", likesCount: '16' }
     ],
     newPostText: "New text",
-    profile: null
+    profile: null,
+    status: 'Enter here your status'
 }
 export const ProfileReducer = (state = initState, action) => {
     switch (action.type) {
@@ -42,6 +45,12 @@ export const ProfileReducer = (state = initState, action) => {
                 profile: action.profile
             }
         }
+        case SET_STATUS: {
+            return {
+                ...state, 
+                status: action.status
+            }
+        }
         default:
             return state;
     }
@@ -53,6 +62,26 @@ export const getCurrentUserThunk = (currentId) => {
             .then(response => {
                 dispatch(setUserProfile(response.data))
 
+            })
+    }
+}
+
+export const setStatusThunk = (userId) => {
+    return (dispatch) => {
+        profileAPI.getStatus(userId)
+            .then(response => {
+                dispatch(setStatus(response.data))
+            })
+    }
+}
+
+export const updateStatusThunk = (status) => {
+    return (dispatch) => {
+        profileAPI.updateStatus(status)
+            .then(response => {
+                if (response.data.resultCode == 0) {
+
+                }
             })
     }
 }
