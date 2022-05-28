@@ -1,0 +1,12 @@
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.errorValidate {
+    border: solid 1px red;
+}
+
+.succesfullValidate {
+    border: solid 1px rgb(8, 8, 8);
+}

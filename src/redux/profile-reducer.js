@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { profileAPI, usersAPI } from '../api/api';
+import { authAPI, profileAPI, usersAPI } from '../api/api';
 
 let ADD_POST = 'ADD-POST';
 let NEW_POST = 'NEW-POST';
@@ -56,6 +56,7 @@ export const ProfileReducer = (state = initState, action) => {
     }
 }
 
+
 export const getCurrentUserThunk = (currentId) => {
     return (dispatch) => {
         usersAPI.getCurrentUser(currentId)
@@ -79,8 +80,9 @@ export const updateStatusThunk = (status) => {
     return (dispatch) => {
         profileAPI.updateStatus(status)
             .then(response => {
-                if (response.data.resultCode == 0) {
-
+                debugger
+                if (response.data.resultCode === 0) {
+                    dispatch(setStatus(status))
                 }
             })
     }
