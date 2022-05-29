@@ -2,7 +2,7 @@ import { authAPI } from "../api/api"
 
 let SET_USER_DATA = "SET_USERS_DATA"
 
-export const setUserData = (id, email, login, isAuth) => ({type: SET_USER_DATA, data: {id, email, login, isAuth} })
+export const setUserData = (id, email, login, isAuth = false) => ({type: SET_USER_DATA, data: {id, email, login, isAuth} })
 
 let initState = { 
     isFetching: false,

@@ -67,7 +67,7 @@ export const getCurrentUserThunk = (currentId) => {
     }
 }
 
-export const setStatusThunk = (userId) => {
+export const getStatusThunk = (userId) => {
     return (dispatch) => {
         profileAPI.getStatus(userId)
             .then(response => {
@@ -80,7 +80,6 @@ export const updateStatusThunk = (status) => {
     return (dispatch) => {
         profileAPI.updateStatus(status)
             .then(response => {
-                debugger
                 if (response.data.resultCode === 0) {
                     dispatch(setStatus(status))
                 }

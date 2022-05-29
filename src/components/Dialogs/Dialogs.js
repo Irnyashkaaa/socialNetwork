@@ -2,8 +2,7 @@ import React from "react";
 import s from "./Dialogs.module.css"
 import ChatUser from './Dialog/Dialog'
 import Message from "./Messages"
-import {Navigate} from 'react-router-dom'
-import { WithAuthRedirect } from "../../hoc/AuthRedirect";
+
 
 
 let Dialogs = (props) => {
@@ -43,7 +42,5 @@ let Dialogs = (props) => {
         </div>
     )
 }
-
-Dialogs = WithAuthRedirect(Dialogs)
 
 export default Dialogs;

@@ -11,7 +11,7 @@ let HeaderContainer = (props) => {
         .then(response => {
             if (response.data.resultCode === 0) {
                 let {id, email, login} = response.data.data
-                props.setUserData(id, email, login)
+                props.setUserData(id, email, login, true)
 
             }
         })
