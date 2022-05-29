@@ -18,7 +18,6 @@ export const authReduser = (state = initState, action) => {
             return {
                 ...state,
                 ...action.data,
-                isAuth: true
             }
         }
 
@@ -47,7 +46,6 @@ export const login = (email, password, rememberMe) => (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
-    debugger
     authAPI.logOut()
         .then(response => {
             if (response.data.resultCode === 0) {

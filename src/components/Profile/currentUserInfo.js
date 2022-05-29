@@ -1,11 +1,11 @@
 import React from "react"
 import s from './currentUserInfo.module.css'
 import preloaderImg from '../../images/preloader.gif'
-import {useParams} from 'react-router-dom'
 import userDefaultImage from '../../images/user.png'
 import { ProfileStatus } from "./Status"
 
 let CurrentUser = (props) => {
+
     let imgSrc;
     if (!props.profile) {
         imgSrc = preloaderImg

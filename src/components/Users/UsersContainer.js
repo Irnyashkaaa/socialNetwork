@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { followAC, setPagesAC, setUsersAC, unfollowAC, setUsersCountAC, toggleIsFetchingAC, followingInProgressAC, getUsersThunkCreator, updateUsersThunk, followUserThunk, unfollowUserThunk } from "../../redux/users-reducer";
+import { getCurrentPage, getIsFetching, getIsProgress, getPageSize, getTotalCount, getUsers } from "../../selectors/userSelector";
 import Users from "./Users";
 
 class UsersAPIComponent extends React.Component {
@@ -31,12 +32,12 @@ class UsersAPIComponent extends React.Component {
 
 let mapStateToProps = (state) => {
     return {
-        users: state.users.users,
-        pageSize: state.users.pageSize,
-        totalCount: state.users.totalCount,
-        currentPage: state.users.currentPage,
-        isFetching: state.users.isFetching,
-        isProgress: state.users.followingIsProgress,
+        users: getUsers(state),
+        pageSize: getPageSize(state),
+        totalCount: getTotalCount(state),
+        currentPage: getCurrentPage(state),
+        isFetching: getIsFetching(state),
+        isProgress: getIsProgress(state),
     }
 }
 

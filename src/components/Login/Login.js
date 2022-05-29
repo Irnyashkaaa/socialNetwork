@@ -2,7 +2,7 @@ import React from "react";
 import s from './Login.module.css'
 import { Formik, Form, Field } from 'formik'
 import { authAPI, profileAPI } from "../../api/api";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 let validateEmail = (value) => {
@@ -22,66 +22,55 @@ let validatePassword = (value) => {
   console.log(error)
   return error
 }
-let errorMessage
 
-
-export const Login = () => (
-  <div>
-    <h1>LOGIN</h1>
-    <Formik
-      initialValues={{
-        password: '',
-        email: '',
-      }}
-      onSubmit={values => {
-        authAPI.login(values.email, values.password, values.remember)
-          .then(response => {
-            if (response.data.resultCode === 0) {
-  
-              authAPI.isUserAuth()
-                .then(response => {
-        
-                  if (response.data.resultCode === 0) {
-                    let {id} = response.data.data
-                    profileAPI.getCurrentUser(id)
-                    profileAPI.getStatus(id);
-
-                  }
-                })
-
-            } else {
-    
-              errorMessage = response.data.messages
-              alert (errorMessage)
-  
-            }
-          })
-        console.log(errorMessage);
-        console.log(values);
-
-      }}
-    >
-      {({ errors, touched, isValidating }) => (
-        <Form className={s.form}>
-          <div>
-            <Field name="email" validate={validateEmail}
-             className={(errors.email && touched.email) 
-             ? s.errorValidate 
-             : s.succesfullValidate} />
-          </div>
-          <div>
-            <Field name="password" validate={validatePassword} 
-            className={(errors.password && touched.password) 
-            ? s.errorValidate 
-            : s.succesfullValidate} />
-          </div>
-          <div>
-            <Field type="checkbox" name="remember" /> remember me
-          </div>
-          <button type="submit">SING IN</button>
-        </Form>
-      )}
-    </Formik>
-  </div>
-);
-
+export const Login = () => {
+  let navigate = useNavigate()
+  return (
+    <div>
+      <h1>LOGIN</h1>
+      <Formik
+        initialValues={{
+          password: '',
+          email: '',
+        }}
+        onSubmit={values => {
+          authAPI.login(values.email, values.password, values.remember)
+            .then(response => {
+              if (response.data.resultCode === 0) {
+                authAPI.isUserAuth()
+                  .then(response => {
+                    if (response.data.resultCode === 0) {
+                      profileAPI.getCurrentUser(response.data.data.id)
+                      navigate('/profile')
+                    }
+                  })
+              } else {
+                alert(response.data.messages)
+              }
+            })
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form className={s.form}>
+            <div>
+              <Field name="email" validate={validateEmail}
+                className={(errors.email && touched.email)
+                  ? s.errorValidate
+                  : s.succesfullValidate} />
+            </div>
+            <div>
+              <Field name="password" validate={validatePassword}
+                className={(errors.password && touched.password)
+                  ? s.errorValidate
+                  : s.succesfullValidate} />
+            </div>
+            <div>
+              <Field type="checkbox" name="remember" /> remember me
+            </div>
+            <button type="submit">SING IN</button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}
