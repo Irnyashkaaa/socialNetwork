@@ -1,15 +1,16 @@
-import axios from 'axios'
-import { authAPI, profileAPI, usersAPI } from '../api/api';
+import { profileAPI, usersAPI } from '../api/api';
 
 let ADD_POST = 'ADD-POST';
 let NEW_POST = 'NEW-POST';
 let SET_USER_PROFILE = 'SET-USER-PRODILE'
 let SET_STATUS = 'SET-STATUS'
+let SAVE_PHOTO = 'SAVE-PHOTO'
 
 export const addPostActionCreator = () => ({ type: "ADD-POST" });
 export const newPostActionCreator = (text) => ({ type: "NEW-POST", newText: text })
 export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile})
 export const setStatus = (status) => ({type: SET_STATUS, status})
+export const savePhotoAC = (file) => ({type: SAVE_PHOTO, file})
 
 
 let initState = {
@@ -51,6 +52,12 @@ export const ProfileReducer = (state = initState, action) => {
                 status: action.status
             }
         }
+        case SAVE_PHOTO: {
+            return {
+                ...state,
+                profile: {...state.profile, photos: action.file}
+            }
+        }
         default:
             return state;
     }
@@ -77,5 +84,14 @@ export const updateStatusThunk = (status) => {
                 if (response.data.resultCode === 0) {
                     dispatch(setStatus(status))
                 }
+    }
+}
+
+export const savePhoto = (file) => {
+    return async (dispatch) => {
+        let response = await profileAPI.savePhoto(file)
+        if(response.data.resultCode === 0) {
+            dispatch(savePhoto(response.data.data.photos))
+        }
     }
 }

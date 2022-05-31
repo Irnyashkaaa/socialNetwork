@@ -30,7 +30,8 @@ let Users = (props) => {
             {portionNumber < portionCount && <button onClick={() => setPortionNumber(++portionNumber)}>next</button>}
             {props.users.map(u => <div className={s.userBody}>
                 <div className={s.user}>
-                    <NavLink to={'/profile/' + u.id}><img className={s.photo} src={props.loading ? preloaderImg : (u.photos.small != null ? u.photos.small : userDefaultImage)} /></NavLink>
+                    <NavLink to={'/profile/' + u.id}>
+                        <img className={s.photo} src={props.loading ? preloaderImg : (u.photos.small != null ? u.photos.small : userDefaultImage)} /></NavLink>
                     {u.followed
                         ? <button disabled={props.progress.some(id => id === u.id)}
                             onClick={() => { props.followUser(u.id) }

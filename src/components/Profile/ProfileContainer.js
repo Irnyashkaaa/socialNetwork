@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
-import { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk } from '../../redux/profile-reducer';
+import { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto } from '../../redux/profile-reducer';
 import { useParams } from 'react-router-dom';
 import CurrentUser from './Profile'
 import { authAPI } from '../../api/api';
@@ -18,6 +18,7 @@ let mapStateToProps = (state) => {
 
 
 let CurrentUserContainer = (props) => {
+
     let id;
     let params = useParams()
     useEffect(() => {
@@ -37,24 +38,19 @@ let CurrentUserContainer = (props) => {
                 })
 
         }
-
-    })
+    }, [])
 
     return (
 
         <div>
-            <CurrentUser {...props} profile={props.profile} status={props.status} updateStatus={props.updateStatusThunk} />
+            <CurrentUser savePhoto={props.savePhoto} {...props} 
+                        isOwner={!params.id} 
+                        profile={props.profile} 
+                        status={props.status}
+                         updateStatus={props.updateStatusThunk} />
         </div>
     )
 }
 let CurrentUserContainerr = WithAuthRedirect(CurrentUserContainer)
 
-export default connect(mapStateToProps, { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, })(CurrentUserContainerr)
-
-// export default WithAuthRedirect(
-//     compose( connect(mapStateToProps,
-//         {setUserProfile,
-//         getCurrentUserThunk,
-//         getStatusThunk,
-//         updateStatusThunk}, )
-//     (CurrentUserContainer)))
+export default connect(mapStateToProps, { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto })(CurrentUserContainerr)

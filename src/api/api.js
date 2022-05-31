@@ -36,7 +36,6 @@ export const usersAPI = {
 
 export const profileAPI = {
     getCurrentUser(currentId) {
-
         return instance.get('profile/' + currentId)
     },
     getStatus (userId) {
@@ -44,6 +43,11 @@ export const profileAPI = {
     },
     updateStatus (status) {
         return instance.put('profile/status', {status: status})
+    }, 
+    savePhoto(photo) {
+        let formData = new FormData()
+        formData.append('image', photo)
+        return instance.put('profile/photo', formData)
     }
 }
 
