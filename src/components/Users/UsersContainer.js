@@ -16,7 +16,6 @@ class UsersAPIComponent extends React.Component {
     }
 
     render() {
-
         return <Users currentPage={this.props.currentPage}
             updateUsers={this.updateUsers}
             users={this.props.users}

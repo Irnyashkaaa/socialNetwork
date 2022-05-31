@@ -78,52 +78,45 @@ export const UsersReducer = (state = initState, action) => {
 }
 
 export const getUsersThunkCreator = (currentPage, pageSize) => {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(toggleIsFetchingAC(true))
-        usersAPI.getUsers(currentPage, pageSize)
-            .then(response => {
-                dispatch(toggleIsFetchingAC(false))
-                dispatch(setUsersAC(response.item))
-            })
+        let response = await usersAPI.getUsers(currentPage, pageSize)
+        await dispatch(toggleIsFetchingAC(false))
+        await dispatch(setUsersAC(response.item))
     }
 }
 
+
 export const updateUsersThunk = (pageNumber, pageSize) => {
-    return (dispatch) => {
+    return async (dispatch) => {
+        let response = await usersAPI.getUsers(pageNumber, pageSize)
         dispatch(setPagesAC(pageNumber))
         dispatch(toggleIsFetchingAC(true))
-        usersAPI.getUsers(pageNumber, pageSize)
-            .then(response => {
+
                 dispatch(toggleIsFetchingAC(false))
                 dispatch(setUsersAC(response.items))
                 dispatch(setUsersCountAC(response.totalCount))
-            })
     }
 }
 
 export const followUserThunk = (userId) => {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(followingInProgressAC(true, userId))
-        usersAPI.deleteFollow(userId)
-            .then(response => {
-                if (response.resultCode == 0) {
-                    dispatch(followAC(userId))
-                }
-                dispatch(followingInProgressAC(false, userId))
-            })
+        let response = await usersAPI.deleteFollow(userId)
+        if (response.resultCode === 0) {
+            dispatch(followAC(userId))
+        }
+        dispatch(followingInProgressAC(false, userId))
     }
 }
 
 export const unfollowUserThunk = (userId) => {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(followingInProgressAC(true, userId))
-        usersAPI.postFollow(userId)
-            .then(response => {
-                if (response.resultCode == 0) {
+        let response = await usersAPI.postFollow(userId)
+                if (response.resultCode === 0) {
                     dispatch(unfollowAC(userId))
                 }
                 dispatch(followingInProgressAC(false, userId))
-            })
-
     }
 }

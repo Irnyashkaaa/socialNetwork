@@ -1,4 +1,4 @@
-import {applyMiddleware, combineReducers, legacy_createStore as createStore} from "redux"; 
+import {applyMiddleware, combineReducers, compose, legacy_createStore as createStore} from "redux"; 
 import { ProfileReducer } from './profile-reducer'
 import { DialogsReducer } from './dialogs-reducer'
 import { UsersReducer } from "./users-reducer";
@@ -15,4 +15,3 @@ let reducers = combineReducers({
 export let store = createStore(reducers, applyMiddleware(thunkMiddleWare))
 
 window.store = store
-

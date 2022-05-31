@@ -20,7 +20,8 @@ let mapDispatchToProps = (dispatch) => {
         newMessage: (text) => {dispatch(newMessageActionCreator(text))}
     }
 }
+let Dialogss = WithAuthRedirect(Dialogs)
 
-let DialogsContainer = connect (mapStateToProps, mapDispatchToProps) (Dialogs)
+let DialogsContainer = connect (mapStateToProps, mapDispatchToProps) (Dialogss)
 
-export default WithAuthRedirect(DialogsContainer);
+export default DialogsContainer;

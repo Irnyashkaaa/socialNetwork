@@ -58,31 +58,24 @@ export const ProfileReducer = (state = initState, action) => {
 
 
 export const getCurrentUserThunk = (currentId) => {
-    return (dispatch) => {
-        usersAPI.getCurrentUser(currentId)
-            .then(response => {
+    return async (dispatch) => {
+        let response = await usersAPI.getCurrentUser(currentId)
                 dispatch(setUserProfile(response.data))
-
-            })
     }
 }
 
 export const getStatusThunk = (userId) => {
-    return (dispatch) => {
-        profileAPI.getStatus(userId)
-            .then(response => {
+    return async (dispatch) => {
+        let response = await profileAPI.getStatus(userId)
                 dispatch(setStatus(response.data))
-            })
     }
 }
 
 export const updateStatusThunk = (status) => {
-    return (dispatch) => {
-        profileAPI.updateStatus(status)
-            .then(response => {
+    return async (dispatch) => {
+        let response = await profileAPI.updateStatus(status)
                 if (response.data.resultCode === 0) {
                     dispatch(setStatus(status))
                 }
-            })
     }
 }
