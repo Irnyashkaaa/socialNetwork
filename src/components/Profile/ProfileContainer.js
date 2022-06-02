@@ -18,7 +18,6 @@ let mapStateToProps = (state) => {
 
 
 let CurrentUserContainer = (props) => {
-
     let id;
     let params = useParams()
     useEffect(() => {

@@ -5,12 +5,20 @@ export const ProfileStatus = (props) => {
     let [editMode, setEditMode] = useState(false)
     let [status, setStatus] = useState(props.status)
     let activateEditmode = () => {
-        setEditMode(true)
-        console.log(editMode);
+        if (props.isOwner) {
+            setEditMode(true)
+            console.log(editMode);
+        }
+
     }
     let deactivateEditMode = () => {
-        props.updateStatus(status)
-        setEditMode(false)
+        try {
+            props.updateStatus(status)
+            setEditMode(false)
+        } catch {
+            alert ('some error')
+        }
+
     }
     let changeStatus = (e) => {
         setStatus(e.currentTarget.value)
@@ -21,13 +29,6 @@ export const ProfileStatus = (props) => {
         setStatus(props.status)
     }, [props.status])
 
-    // componentDidUpdate(prevProps, prevState) {
-    //     if (prevProps.status != this.props.status) {
-    //         this.setState({
-    //             status: this.props.status
-    //         })
-    //     }
-    // }
         return (
             <div>
                 {(editMode)

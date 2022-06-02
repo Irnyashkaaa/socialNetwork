@@ -5,7 +5,6 @@ import userDefaultImage from '../../images/user.png'
 import { ProfileStatus } from "./Status"
 
 let CurrentUser = (props) => {
-
     let imgSrc;
     if (!props.profile) {
         imgSrc = preloaderImg
@@ -16,11 +15,11 @@ let CurrentUser = (props) => {
     }
 
     return (
-
         <div className={s.CurrentUserInfo}>
             <img src={imgSrc} />
             <div className='currentUserDescription'></div>
-            <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
+
+            <ProfileStatus status={props.status} updateStatus={props.updateStatus} isOwner={props.isOwner}/>
         </div>)
 }
 

@@ -3,6 +3,7 @@ import s from './Login.module.css'
 import { Formik, Form, Field } from 'formik'
 import { authAPI, profileAPI } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
 
 
 let validateEmail = (value) => {
@@ -17,14 +18,16 @@ let validateEmail = (value) => {
 let validatePassword = (value) => {
   let error;
   if (!value) {
-    error = 'Empty password'
+    error = 'Empty field'
   }
   console.log(error)
   return error
 }
 
-export const Login = () => {
+
+const LoginForm = (props) => {
   let navigate = useNavigate()
+  let captcha = props.captchaUrl
   return (
     <div>
       <h1>LOGIN</h1>
@@ -34,7 +37,7 @@ export const Login = () => {
           email: '',
         }}
         onSubmit={values => {
-          authAPI.login(values.email, values.password, values.remember)
+          authAPI.login(values.email, values.password, values.remember, values.captcha)
             .then(response => {
               if (response.data.resultCode === 0) {
                 authAPI.isUserAuth()
@@ -52,6 +55,12 @@ export const Login = () => {
       >
         {({ errors, touched }) => (
           <Form className={s.form}>
+            <div>
+              {captcha && <div>
+                <img src={captcha} />
+                <Field validate={validatePassword} name='captcha'/>
+                </div>}
+            </div>
             <div>
               <Field name="email" validate={validateEmail}
                 className={(errors.email && touched.email)
@@ -74,3 +83,9 @@ export const Login = () => {
     </div>
   );
 }
+
+let mapStateToProps = (state) => ({
+  captchaUrl: state.auth.captchaUrl
+}
+)
+export const Login = connect (mapStateToProps, {})(LoginForm)

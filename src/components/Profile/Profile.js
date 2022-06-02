@@ -13,7 +13,7 @@ let CurrentUser = (props) => {
         <div>
             {props.isOwner && <input onChange={onMainPhotoSelected} type='file' />}
             <div className='currentUser'>
-                <CurrentUserInfo profile={props.profile} status={props.status} updateStatus={props.updateStatus}/>
+                <CurrentUserInfo profile={props.profile} isOwner={props.isOwner} status={props.status} updateStatus={props.updateStatus}/>
                 <MyPostsContainer />
             </div>
         </div>
