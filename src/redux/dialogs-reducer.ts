@@ -1,8 +1,29 @@
 let ADD_MESSAGE = 'ADD-MESSAGE';
 let NEW_MESSAGE = 'NEW-MESSAGE';
 
-export const addMessageActionCreator = () => ({ type: "ADD-MESSAGE" })
-export const newMessageActionCreator = (text) => ({ type: "NEW-MESSAGE", newMessage: text })
+type addMessageActionCreatorType = {
+    type: typeof ADD_MESSAGE
+}
+
+export const addMessageActionCreator = () => ({ type: ADD_MESSAGE })
+
+type newMessageActionCreatorType = {
+    type: typeof NEW_MESSAGE
+    newMessage: string
+}
+
+export const newMessageActionCreator = (text: string): newMessageActionCreatorType=> ({ type: NEW_MESSAGE, newMessage: text })
+
+type userDataType = {
+    name: string
+    id: number
+}
+
+type messagesType = {
+    message: string
+    id: number
+}
+
 let initState = {
     newMessageText: "write new message",
     userData: [
@@ -12,7 +33,7 @@ let initState = {
         { name: "Mike", id: 4 },
         { name: "Eva", id: 5 },
         { name: "Helen", id: 6 }
-    ],
+    ] as Array <userDataType>,
     messages: [
         { message: "chat1", id: "1" },
         { message: "chat2", id: "2" },
@@ -20,9 +41,11 @@ let initState = {
         { message: "chat4", id: "4" },
         { message: "chat5", id: "5" },
         { message: "chat6", id: "6" },
-    ]
+    ] as Array <messagesType>
 }
-export const DialogsReducer = (state = initState, action) => {
+
+type InitStateType = typeof InitState
+export const DialogsReducer = (state = initState, action: any): InitStateType => {
     switch (action.type) {
         case ADD_MESSAGE: {
             return {

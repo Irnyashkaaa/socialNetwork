@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
-import { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto } from '../../redux/profile-reducer';
+import { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto } from '../../redux/profile-reducer.ts';
 import { useParams } from 'react-router-dom';
 import CurrentUser from './Profile'
 import { authAPI } from '../../api/api';
