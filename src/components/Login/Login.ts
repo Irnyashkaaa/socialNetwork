@@ -1,7 +1,7 @@
 import React from "react";
 import s from './Login.module.css'
-import { Formik, Form, Field } from 'formik'
-import { authAPI, profileAPI } from "../../api/api";
+import {Formik, FormikHelpers, FormikProps, Form, Field, FieldProps,} from 'formik';
+import { authAPI, profileAPI } from "../../api/api.ts";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -23,9 +23,11 @@ let validatePassword = (value) => {
   console.log(error)
   return error
 }
+interface MyFormValues {
 
+}
 
-const LoginForm = (props) => {
+const LoginForm: React.FC<{}> = (props) => {
   let navigate = useNavigate()
   let captcha = props.captchaUrl
   return (
@@ -84,8 +86,12 @@ const LoginForm = (props) => {
   );
 }
 
-let mapStateToProps = (state) => ({
+type mapStateToPropsType = {
+  captchaUrl: string | null
+}
+
+let mapStateToProps = (state: any): mapStateToPropsType => ({
   captchaUrl: state.auth.captchaUrl
 }
 )
-export const Login = connect (mapStateToProps, {})(LoginForm)
+export const Login = connect<mapStateToPropsType>(mapStateToProps, {})(LoginForm)

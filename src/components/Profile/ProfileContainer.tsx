@@ -1,28 +1,41 @@
+
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto } from '../../redux/profile-reducer.ts';
+import {CurrentUser} from './Profile'
 import { useParams } from 'react-router-dom';
-import CurrentUser from './Profile'
-import { authAPI } from '../../api/api';
+import { authAPI } from '../../api/api.ts';
 import { WithAuthRedirect } from '../../hoc/AuthRedirect'
-import { compose } from 'redux';
+import {profileType} from '../../types/types.ts'
 
-let mapStateToProps = (state) => {
+type mapStateToPropsType = {
+    profile: profileType
+    isAuth: boolean
+    status: string
+}
+type mapDispatchToProps = {
+    getCurrentUserThunk: (id: number) => void
+    getStatusThunk: (id: number) => void
+    savePhoto: () => void
+    updateStatusThunk: () => void
+}
+type propsType = mapStateToPropsType  & mapDispatchToProps
+
+let mapStateToProps = (state: any): mapStateToPropsType => {
     return ({
         profile: state.profilePage.profile,
         isAuth: state.auth.isAuth,
         status: state.profilePage.status,
-        nickName: state.auth.login
     })
 }
 
 
-let CurrentUserContainer = (props) => {
-    let id;
+let CurrentUserContainer: React.FC<propsType> = (props) => {
+    let id: number;
     let params = useParams()
     useEffect(() => {
         if (params.id) {
-            id = params.id
+            id = Number(params.id)
             props.getCurrentUserThunk(id)
             props.getStatusThunk(id)
         } else {
@@ -52,4 +65,4 @@ let CurrentUserContainer = (props) => {
 }
 let CurrentUserContainerr = WithAuthRedirect(CurrentUserContainer)
 
-export default connect(mapStateToProps, { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto })(CurrentUserContainerr)
+export default connect<mapStateToPropsType, mapDispatchToProps>(mapStateToProps, { getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto })(CurrentUserContainerr)

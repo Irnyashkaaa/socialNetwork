@@ -1,5 +1,4 @@
-
-import { profileAPI, usersAPI } from '../api/api';
+import { profileAPI, usersAPI, responseCodes } from '../api/api.ts';
 import { photosType, postsDataType, profileType } from '../types/types';
 
 let ADD_POST = 'ADD-POST';
@@ -7,6 +6,8 @@ let NEW_POST = 'NEW-POST';
 let SET_USER_PROFILE = 'SET-USER-PRODILE'
 let SET_STATUS = 'SET-STATUS'
 let SAVE_PHOTO = 'SAVE-PHOTO'
+
+type actionsTypes = addPostActionCreatoreType | newPostActionCreatorType | setUserProfileType | setStatusType | setStatusType | savePhotoType 
 
 type addPostActionCreatoreType = {
     type: typeof ADD_POST
@@ -39,10 +40,6 @@ type savePhotoType = {
 export const savePhotoAC = (file: photosType): savePhotoType => ({ type: SAVE_PHOTO, file })
 
 
-
-
-
-
 type initStateType = {
     postsData: postsDataType[]
     newPostText: string
@@ -62,7 +59,7 @@ let initState: initStateType = {
     profile: null,
     status: 'Enter here your status'
 }
-export const ProfileReducer = (state = initState, action: any) => {
+export const ProfileReducer = (state = initState, action: actionsTypes) => {
     switch (action.type) {
         case ADD_POST: {
             return {
@@ -118,7 +115,7 @@ export const getStatusThunk = (userId: number) => {
 export const updateStatusThunk = (status: string) => {
     return async (dispatch: any) => {
         let response = await profileAPI.updateStatus(status)
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === responseCodes.Succes) {
             dispatch(setStatus(status))
         } else {
             alert('some error')
@@ -129,7 +126,7 @@ export const updateStatusThunk = (status: string) => {
 export const savePhoto = (file: any) => {
     return async (dispatch: any) => {
         let response = await profileAPI.savePhoto(file)
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === responseCodes.Succes) {
             dispatch(savePhotoAC(response.data.data.photos))
         }
     }

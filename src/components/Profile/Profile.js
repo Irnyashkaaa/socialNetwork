@@ -1,9 +1,8 @@
 import React from 'react'
-import s from './Profile.module.css'
 import CurrentUserInfo from './currentUserInfo'
-import MyPostsContainer from './MyPosts/MyPostsContainer'
+import MyPostsContainer from './MyPosts/MyPostsContainer.tsx'
 
-let CurrentUser = (props) => {
+export let CurrentUser = (props) => {
 
     const onMainPhotoSelected = (e) => {
         props.savePhoto(e.target.files[0])
@@ -19,6 +18,3 @@ let CurrentUser = (props) => {
         </div>
     )
 }
-
-
-export default CurrentUser;

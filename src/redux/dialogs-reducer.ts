@@ -5,14 +5,14 @@ type addMessageActionCreatorType = {
     type: typeof ADD_MESSAGE
 }
 
-export const addMessageActionCreator = () => ({ type: ADD_MESSAGE })
+export const addMessageActionCreator = (): addMessageActionCreatorType => ({ type: ADD_MESSAGE })
 
 type newMessageActionCreatorType = {
     type: typeof NEW_MESSAGE
-    newMessage: string
+    text: string
 }
 
-export const newMessageActionCreator = (text: string): newMessageActionCreatorType=> ({ type: NEW_MESSAGE, newMessage: text })
+export const newMessageActionCreator = (text: string): newMessageActionCreatorType=> ({ type: NEW_MESSAGE, text })
 
 type userDataType = {
     name: string
@@ -35,17 +35,19 @@ let initState = {
         { name: "Helen", id: 6 }
     ] as Array <userDataType>,
     messages: [
-        { message: "chat1", id: "1" },
-        { message: "chat2", id: "2" },
-        { message: "chat3", id: "3" },
-        { message: "chat4", id: "4" },
-        { message: "chat5", id: "5" },
-        { message: "chat6", id: "6" },
+        { message: "chat1", id: 1 },
+        { message: "chat2", id: 2 },
+        { message: "chat3", id: 3 },
+        { message: "chat4", id: 4 },
+        { message: "chat5", id: 5 },
+        { message: "chat6", id: 6 },
     ] as Array <messagesType>
 }
 
-type InitStateType = typeof InitState
-export const DialogsReducer = (state = initState, action: any): InitStateType => {
+type InitStateType = typeof initState
+type actionTypes = addMessageActionCreatorType | newMessageActionCreatorType
+
+export const DialogsReducer = (state = initState, action: actionTypes): InitStateType => {
     switch (action.type) {
         case ADD_MESSAGE: {
             return {
@@ -57,7 +59,7 @@ export const DialogsReducer = (state = initState, action: any): InitStateType =>
         case NEW_MESSAGE: {
             return {
                 ...state,
-                newMessageText: action.newMessage
+                newMessageText: action.text
             }
         }
         default:
