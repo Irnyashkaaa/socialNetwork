@@ -9,7 +9,6 @@ const instance = axios.create({
     }
 
 })
-
 type initAPIResponseType = {
     resultCode: number
     messages: []
@@ -19,7 +18,6 @@ type initAPIResponseType = {
         login?: string
     }
 }
-
 type getUsersInfoType = {
     name: string
     id: number
@@ -89,7 +87,6 @@ export const usersAPI = {
     }
 }
 
-
 export const profileAPI = {
     getCurrentUser(currentId: number) {
         return instance.get<getCurrentUserType>('profile/' + currentId)
@@ -111,14 +108,13 @@ export const authAPI = {
     isUserAuth () {
         return instance.get <initAPIResponseType>('auth/me')
     },
-    login(email: string, password: string, rememberMe: boolean, captcha: string | null = null) {
+    login(email: any, password: string, rememberMe: boolean, captcha: string | null | undefined = null) {
         return instance.post<initAPIResponseType>('auth/login', {email, password, rememberMe, captcha})
     },
     logOut() {
         return instance.delete<initAPIResponseType>('auth/login')
     }
 }
-
 
 export const securityAPI = {
     getCaptchaURL () {

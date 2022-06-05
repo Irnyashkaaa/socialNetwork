@@ -4,7 +4,7 @@ import './App.css';
 import NavPage from './components/NavPage/nav_page'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HeaderContainer from './components/Header/headerContainer.tsx'
-import { Login } from './components/Login/Login'
+import { Login } from './components/Login/Login.tsx'
 import React, { Suspense } from 'react'
 const DialogsContainer = React.lazy(() => import ('./components/Dialogs/DialogsContainer.tsx'));
 const UsersContainer = React.lazy(() => import ('./components/Users/UsersContainer.tsx'));

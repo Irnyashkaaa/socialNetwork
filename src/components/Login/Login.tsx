@@ -1,13 +1,13 @@
 import React from "react";
 import s from './Login.module.css'
-import {Formik, FormikHelpers, FormikProps, Form, Field, FieldProps,} from 'formik';
-import { authAPI, profileAPI } from "../../api/api.ts";
+import { Formik, Form, Field } from 'formik'
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
+import { login } from "../../redux/auth-reducer.ts";
 
 
-let validateEmail = (value) => {
-  let error;
+let validateEmail = (value: string) => {
+  let error: string | null;
   if (!value || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
     error = 'Invalid email address';
   }
@@ -15,19 +15,30 @@ let validateEmail = (value) => {
   return error
 }
 
-let validatePassword = (value) => {
-  let error;
+let validatePassword = (value: string) => {
+  let error: string;
   if (!value) {
     error = 'Empty field'
   }
   console.log(error)
   return error
 }
-interface MyFormValues {
-
+let validateCheckbox = (value: boolean) => {
+  console.log(value);
 }
 
-const LoginForm: React.FC<{}> = (props) => {
+type propsType = {
+  captchaUrl: string
+}
+
+type onSubmitType = {
+  email: string
+  password: string
+  rememberMe?: boolean
+  captcha?: string | undefined | null
+}
+
+let LoginForm: React.FC<propsType> = (props) => {
   let navigate = useNavigate()
   let captcha = props.captchaUrl
   return (
@@ -38,21 +49,9 @@ const LoginForm: React.FC<{}> = (props) => {
           password: '',
           email: '',
         }}
-        onSubmit={values => {
-          authAPI.login(values.email, values.password, values.remember, values.captcha)
-            .then(response => {
-              if (response.data.resultCode === 0) {
-                authAPI.isUserAuth()
-                  .then(response => {
-                    if (response.data.resultCode === 0) {
-                      profileAPI.getCurrentUser(response.data.data.id)
-                      navigate('/profile')
-                    }
-                  })
-              } else {
-                alert(response.data.messages)
-              }
-            })
+        onSubmit={(values: onSubmitType) => {
+          login(values.email, values.password, values.rememberMe, values.captcha)
+          navigate('/profile')
         }}
       >
         {({ errors, touched }) => (
@@ -76,7 +75,7 @@ const LoginForm: React.FC<{}> = (props) => {
                   : s.succesfullValidate} />
             </div>
             <div>
-              <Field type="checkbox" name="remember" /> remember me
+              <Field type="checkbox" name="rememberMe" validate={validateCheckbox}/> remember me
             </div>
             <button type="submit">SING IN</button>
           </Form>
@@ -86,12 +85,11 @@ const LoginForm: React.FC<{}> = (props) => {
   );
 }
 
-type mapStateToPropsType = {
-  captchaUrl: string | null
-}
 
-let mapStateToProps = (state: any): mapStateToPropsType => ({
+
+
+let mapStateToProps = (state) => ({
   captchaUrl: state.auth.captchaUrl
 }
 )
-export const Login = connect<mapStateToPropsType>(mapStateToProps, {})(LoginForm)
+export const Login = connect (mapStateToProps, {})(LoginForm)
