@@ -1,18 +1,15 @@
+import { ActionTypes } from "./redux-store";
+
 let ADD_MESSAGE = 'ADD-MESSAGE';
 let NEW_MESSAGE = 'NEW-MESSAGE';
 
-type addMessageActionCreatorType = {
-    type: typeof ADD_MESSAGE
+
+const actions = {
+    addMessageActionCreator: () => ({ type: ADD_MESSAGE }),
+    newMessageActionCreator: (text: string) => ({ type: NEW_MESSAGE, text }),
 }
 
-export const addMessageActionCreator = (): addMessageActionCreatorType => ({ type: ADD_MESSAGE })
 
-type newMessageActionCreatorType = {
-    type: typeof NEW_MESSAGE
-    text: string
-}
-
-export const newMessageActionCreator = (text: string): newMessageActionCreatorType=> ({ type: NEW_MESSAGE, text })
 
 type userDataType = {
     name: string
@@ -45,7 +42,7 @@ let initState = {
 }
 
 type InitStateType = typeof initState
-type actionTypes = addMessageActionCreatorType | newMessageActionCreatorType
+type actionTypes = ActionTypes<typeof actions>
 
 export const DialogsReducer = (state = initState, action: actionTypes): InitStateType => {
     switch (action.type) {

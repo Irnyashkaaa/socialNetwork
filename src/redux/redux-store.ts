@@ -12,6 +12,9 @@ let reducers = combineReducers({
     auth: authReduser,
 })
 
+type PropertiesType<T> = T extends {[key: string]: infer U} ? U : never
+export type ActionTypes<T extends {[key: string]: (...args: any[]) => any}> = ReturnType<PropertiesType<T>>
+
 type reducersType = typeof reducers
 export type AppStateType = ReturnType<reducersType>
 

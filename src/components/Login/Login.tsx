@@ -23,9 +23,6 @@ let validatePassword = (value: string) => {
   console.log(error)
   return error
 }
-let validateCheckbox = (value: boolean) => {
-  console.log(value);
-}
 
 type propsType = {
   captchaUrl: string
@@ -75,7 +72,7 @@ let LoginForm: React.FC<propsType> = (props) => {
                   : s.succesfullValidate} />
             </div>
             <div>
-              <Field type="checkbox" name="rememberMe" validate={validateCheckbox}/> remember me
+              <Field type="checkbox" name="rememberMe"/> remember me
             </div>
             <button type="submit">SING IN</button>
           </Form>

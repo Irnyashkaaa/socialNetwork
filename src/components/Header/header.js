@@ -6,7 +6,6 @@ import {useNavigate} from 'react-router-dom'
 let Header = (props) => {
     let navigate = useNavigate()
     let onClick = () => {
-        console.log('click')
         props.logout()
         navigate('/login')
     }
