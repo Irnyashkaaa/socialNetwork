@@ -4,7 +4,7 @@ let ADD_MESSAGE = 'ADD-MESSAGE';
 let NEW_MESSAGE = 'NEW-MESSAGE';
 
 
-const actions = {
+export const actions = {
     addMessageActionCreator: () => ({ type: ADD_MESSAGE }),
     newMessageActionCreator: (text: string) => ({ type: NEW_MESSAGE, text }),
 }

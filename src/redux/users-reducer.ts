@@ -1,11 +1,11 @@
-import { responseCodes } from './../api/api.ts';
+// @ts-ignore
+import { responseCodes, usersAPI } from './../api/api.ts';
 import { ActionTypes, AppStateType } from './redux-store';
 import { ThunkAction } from 'redux-thunk';
-import { usersAPI } from "../api/api.ts"
 import { usersType } from '../types/types';
 import { Dispatch } from 'redux';
 
-const actions = {
+export const actions = {
     followAC: (userId: number) => ({ type: 'FOLLOW', userId } as const),
     unfollowAC: (userId: number) => ({ type: 'UNFOLLOW', userId } as const),
     setUsersAC: (users: usersType) => ({ type: 'SET_USERS', users } as const),
@@ -40,7 +40,7 @@ export const UsersReducer = (state = initState, action: actionsTypes) => {
                 ...state,
                 users: state.users.map(u => {
                     if (u.id === action.userId) {
-                        return { ...u, followed: false }
+                        return { ...u, followed: true }
                     } else {
                         return u
                     }
@@ -52,7 +52,7 @@ export const UsersReducer = (state = initState, action: actionsTypes) => {
                 ...state,
                 users: state.users.map(u => {
                     if (u.id === action.userId) {
-                        return { ...u, followed: true }
+                        return { ...u, followed: false }
                     } else {
                         return u
                     }
