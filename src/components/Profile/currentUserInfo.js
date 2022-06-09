@@ -3,23 +3,29 @@ import s from './currentUserInfo.module.css'
 import preloaderImg from '../../images/preloader.gif'
 import userDefaultImage from '../../images/user.png'
 import { ProfileStatus } from "./Status"
+import { getProfile } from '../../selectors/profileSelector'
+import { useSelector } from 'react-redux'
+
 
 let CurrentUser = (props) => {
+
+
+    const profile = useSelector(getProfile)
+
+
     let imgSrc;
-    if (!props.profile) {
+    if (!profile) {
         imgSrc = preloaderImg
-    } else if (!props.profile.photos.large) {
+    } else if (!profile.photos.large) {
         imgSrc = userDefaultImage
     } else {
-        imgSrc = props.profile.photos.large
+        imgSrc = profile.photos.large
     }
 
     return (
         <div className={s.CurrentUserInfo}>
             <img src={imgSrc} />
-            <div className='currentUserDescription'></div>
-
-            <ProfileStatus status={props.status} updateStatus={props.updateStatus} isOwner={props.isOwner}/>
+            <ProfileStatus isOwner={props.isOwner}/>
         </div>)
 }
 

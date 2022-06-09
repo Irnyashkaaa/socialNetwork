@@ -5,10 +5,11 @@ import userDefaultImage from '../../images/user.png'
 import preloaderImg from '../../images/preloader.gif'
 import { NavLink } from "react-router-dom";
 // @ts-ignore
-import { getCurrentPage, getIsFetching, getIsProgress, getPageSize, getTotalCount, getUsers } from "../../selectors/userSelector";
+import { getCurrentPage, getFilter, getIsFetching, getIsProgress, getPageSize, getTotalCount, getUsers } from "../../selectors/userSelector";
 //@ts-ignore
 import {UsersFilterForm} from './UsersFilterForm.tsx'
 import { getUsersThunkCreator, followUserThunk, unfollowUserThunk, updateUsersThunk } from "../../redux/users-reducer.ts";
+import { useNavigate} from "react-router-dom";
 
 
 let Users = () => {
@@ -18,7 +19,7 @@ let Users = () => {
     const currentPage = useSelector(getCurrentPage)
     const loading = useSelector(getIsFetching)
     const progress = useSelector(getIsProgress)
-
+    const filter = useSelector(getFilter)
 
     const dispatch = useDispatch()
 
@@ -36,9 +37,17 @@ let Users = () => {
         dispatch(unfollowUserThunk(userId))
     }
 
+    const navigate = useNavigate()
+
     useEffect(() => {
-        dispatch(getUsersThunkCreator(currentPage, pageSize, '', null))
+
+        dispatch(getUsersThunkCreator(currentPage, pageSize, filter.term, filter.friend))
     }, [])
+
+    useEffect(() => {
+
+        navigate(`/users?term=${filter.term}&friend=${filter.friend}&page=${Number(currentPage)}`)
+    }, [filter, currentPage])
 
     let pagesCount = Math.ceil(totalCount / pageSize)
 

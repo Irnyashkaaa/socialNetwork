@@ -21,3 +21,7 @@ export const getIsFetching = (state) => {
 export const getIsProgress = (state) => {
     return state.usersPage.followingIsProgress
 }
+
+export const getFilter = (state) => {
+    return state.usersPage.filter
+}

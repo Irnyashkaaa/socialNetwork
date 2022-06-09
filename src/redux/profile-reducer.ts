@@ -1,3 +1,4 @@
+// @ts-ignore
 import { profileAPI, usersAPI, responseCodes } from '../api/api.ts';
 import { photosType, postsDataType, profileType } from '../types/types';
 
@@ -10,8 +11,6 @@ export const actions = {
     setStatus: (status: string) => ({ type:'SET_STATUS', status }),
     savePhotoAC: (file: photosType) => ({ type: 'SAVE_PHOTO', file })
 }
-
-
 
 type initStateType = {
     postsData: postsDataType[]

@@ -1,12 +1,16 @@
 
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
+// @ts-ignore
 import { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto } from '../../redux/profile-reducer.ts';
 import {CurrentUser} from './Profile'
 import { useParams } from 'react-router-dom';
+// @ts-ignore
 import { authAPI } from '../../api/api.ts';
 import { WithAuthRedirect } from '../../hoc/AuthRedirect'
+// @ts-ignore
 import {profileType} from '../../types/types.ts'
+import { getIsAuth, getProfile, getStatus } from '../../selectors/profileSelector';
 
 type mapStateToPropsType = {
     profile: profileType
@@ -23,9 +27,9 @@ type propsType = mapStateToPropsType  & mapDispatchToProps
 
 let mapStateToProps = (state: any): mapStateToPropsType => {
     return ({
-        profile: state.profilePage.profile,
-        isAuth: state.auth.isAuth,
-        status: state.profilePage.status,
+        profile: getProfile(state),
+        isAuth: getIsAuth(state),
+        status: getStatus(state),
     })
 }
 
