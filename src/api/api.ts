@@ -5,11 +5,11 @@ const instance = axios.create({
     withCredentials: true,
     baseURL: `https://social-network.samuraijs.com/api/1.0/`,
     headers: {
-        'API-KEY': 'acdda7bf-002b-417d-b981-ca3877d2c4cb'
+        'API-KEY': 'a6bb54fd-7959-4b36-a81b-1f7f125aecad'
     }
 
 })
-type initAPIResponseType = {
+export type initAPIResponseType = {
     resultCode: number
     messages: []
     data: {
@@ -64,17 +64,17 @@ export enum responseCodes {
 }
 
 export const usersAPI = {
-    getUsers (currentPage: number = 1, pageSize: number = 5) {
-        return instance.get<getUsersType>(`users?page=${currentPage}&count=${pageSize}`)
+    getUsers (currentPage: number = 1, pageSize: number = 5, term: string | null = '', friend: string | null) {
+        return instance.get<getUsersType>(`users?page=${currentPage}&count=${pageSize}&term=${term}&friend=${friend}`)
         .then (response => {
                 return response.data
             })
     },
     deleteFollow (userId: number) {
-        return instance.delete<initAPIResponseType>(`follow/${userId}`)
+        return instance.delete(`follow/${userId}`)
             .then (response => {
                 return response.data
-            })
+            }) as Promise<initAPIResponseType>
     },
     postFollow (userId: number) {
         return instance.post<initAPIResponseType>(`follow/${userId}`, {})
@@ -84,7 +84,7 @@ export const usersAPI = {
     },
     getCurrentUser (currentId: number) {
         return profileAPI.getCurrentUser(currentId)
-    }
+    },
 }
 
 export const profileAPI = {

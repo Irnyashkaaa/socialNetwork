@@ -4,6 +4,7 @@ import { ActionTypes, AppStateType } from './redux-store';
 import { ThunkAction } from 'redux-thunk';
 import { usersType } from '../types/types';
 import { Dispatch } from 'redux';
+import { initAPIResponseType } from '../api/api';
 
 export const actions = {
     followAC: (userId: number) => ({ type: 'FOLLOW', userId } as const),
@@ -13,6 +14,7 @@ export const actions = {
     setUsersCountAC: (totalCount: number) => ({ type: 'SETUSERSCOUNT', totalCount } as const),
     toggleIsFetchingAC: (isFetching: boolean) => ({ type: 'TOGGLEISFETCHING', isFetching } as const),
     followingInProgressAC: (isProgress: boolean, userId: number) => ({ type: 'FOLLOWINGISPROGRESS', isProgress, userId } as const),
+    setFilterAC: (term: string, friend: string | null) => ({type: 'SET_USERS_FILTER', term, friend} as const)
 }
 
 type initStateType = {
@@ -21,7 +23,13 @@ type initStateType = {
     totalCount: number
     currentPage: number
     isFetching: boolean
-    followingIsProgress: number[]
+    followingIsProgress: number[],
+    filter: filterType
+}
+
+export type filterType = {
+    term: string
+    friend: string | null
 }
 let initState: initStateType = {
     users: [],
@@ -29,7 +37,11 @@ let initState: initStateType = {
     totalCount: 30,
     currentPage: 1,
     isFetching: false,
-    followingIsProgress: []
+    followingIsProgress: [],
+    filter: {
+        term: '',
+        friend: null
+    }
 }
 type actionsTypes = ActionTypes<typeof actions>
 
@@ -80,6 +92,15 @@ export const UsersReducer = (state = initState, action: actionsTypes) => {
                         : [state.followingIsProgress.filter(id => id != action.userId)]
             }
         }
+        case 'SET_USERS_FILTER': {
+            return {
+                ...state,
+                filter: {
+                    term: action.term,
+                    friend: action.friend
+                }
+            }
+        }
         default:
             return state
     }
@@ -88,12 +109,13 @@ export const UsersReducer = (state = initState, action: actionsTypes) => {
 type thunkType = ThunkAction<void, AppStateType, unknown, actionsTypes>
 type dispatchType = Dispatch<actionsTypes>
 
-export const getUsersThunkCreator = (currentPage: number, pageSize: number): thunkType => {
+export const getUsersThunkCreator = (currentPage: number, pageSize: number, term: string, friend: string): thunkType => {
     return async (dispatch: dispatchType) => {
         dispatch(actions.toggleIsFetchingAC(true))
-        let response = await usersAPI.getUsers(currentPage, pageSize)
+        let response = await usersAPI.getUsers(currentPage, pageSize, term, friend)
+        dispatch(actions.setFilterAC(term, friend))
         dispatch(actions.toggleIsFetchingAC(false))
-        dispatch(actions.setUsersAC(response.item))
+        dispatch(actions.setUsersAC(response.items))
     }
 }
 
@@ -107,24 +129,29 @@ export const updateUsersThunk = (pageNumber: number, pageSize: number): thunkTyp
     }
 }
 
+const _followUnfollowFlow = async (dispatch: Dispatch<actionsTypes>, userId: number,
+    apiMethod: (userId: number) => Promise<initAPIResponseType>, 
+    actionCreatore: (userId: number) => actionsTypes) => {
+
+        dispatch(actions.followingInProgressAC(true, userId))
+
+        let response = await apiMethod(userId)
+        debugger
+        if (response.resultCode === 0) {
+            dispatch(actionCreatore(userId))
+        }
+
+        dispatch(actions.followingInProgressAC(false, userId))
+    }
+
 export const followUserThunk = (userId: number): thunkType => {
     return async (dispatch: dispatchType) => {
-        dispatch(actions.followingInProgressAC(true, userId))
-        let response = await usersAPI.deleteFollow(userId)
-        if (response.resultCode === responseCodes.Succes) {
-            dispatch(actions.followAC(userId))
-        }
-        dispatch(actions.followingInProgressAC(false, userId))
+        _followUnfollowFlow(dispatch, userId, usersAPI.deleteFollow.bind(usersAPI), actions.followAC)
     }
 }
 
 export const unfollowUserThunk = (userId: number): thunkType => {
     return async (dispatch: dispatchType) => {
-        dispatch(actions.followingInProgressAC(true, userId))
-        let response = await usersAPI.postFollow(userId)
-        if (response.resultCode === responseCodes.Succes) {
-            dispatch(actions.unfollowAC(userId))
-        }
-        dispatch(actions.followingInProgressAC(false, userId))
+        _followUnfollowFlow(dispatch, userId, usersAPI.postFollow.bind(usersAPI), actions.unfollowAC)
     }
 }
