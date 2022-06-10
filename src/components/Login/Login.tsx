@@ -1,26 +1,25 @@
 import React from "react";
 import s from './Login.module.css'
-import { Formik, Form, Field } from 'formik'
+import { Form, Input, Checkbox, SubmitButton} from 'formik-antd'
+import { Formik} from 'formik'
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../../redux/auth-reducer.ts";
 
 
-let validateEmail = (value: string) => {
+const validateEmail = (value: string) => {
   let error: string | null;
   if (!value || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
     error = 'Invalid email address';
   }
-  console.log(error);
   return error
 }
 
-let validatePassword = (value: string) => {
+const validatePassword = (value: string) => {
   let error: string;
   if (!value) {
-    error = 'Empty field'
+    error = 'Empty Input'
   }
-  console.log(error)
   return error
 }
 
@@ -35,11 +34,11 @@ type onSubmitType = {
   captcha?: string | undefined | null
 }
 
-let LoginForm: React.FC<propsType> = (props) => {
+const LoginForm: React.FC<propsType> = (props) => {
   let navigate = useNavigate()
   let captcha = props.captchaUrl
   return (
-    <div>
+    <div  style={{ width: 304 }}>
       <h1>LOGIN</h1>
       <Formik
         initialValues={{
@@ -56,25 +55,25 @@ let LoginForm: React.FC<propsType> = (props) => {
             <div>
               {captcha && <div>
                 <img src={captcha} />
-                <Field validate={validatePassword} name='captcha'/>
+                <Input validate={validatePassword} name='captcha'/>
                 </div>}
             </div>
             <div>
-              <Field name="email" validate={validateEmail}
+              <Input name="email" validate={validateEmail}
                 className={(errors.email && touched.email)
                   ? s.errorValidate
                   : s.succesfullValidate} />
             </div>
             <div>
-              <Field name="password" validate={validatePassword}
+              <Input name="password" validate={validatePassword}
                 className={(errors.password && touched.password)
                   ? s.errorValidate
                   : s.succesfullValidate} />
             </div>
             <div>
-              <Field type="checkbox" name="rememberMe"/> remember me
+              <Checkbox type="checkbox" name="rememberMe"/> remember me
             </div>
-            <button type="submit">SING IN</button>
+            <SubmitButton >SING IN</SubmitButton>
           </Form>
         )}
       </Formik>

@@ -1,7 +1,8 @@
 .item {
     display: flex;
     margin: 20px;
-    background-color: brown;
+    background-color: rgb(185, 199, 228);
+    border: 1px solid black
 }
 .userName {
     font-weight: 600;

@@ -1,11 +1,15 @@
 import React from "react";
-import { Formik, Field, Form } from 'formik'
+import { Formik} from 'formik'
+import { Form, Input, SubmitButton, Select} from 'formik-antd'
+import {SearchOutlined} from '@ant-design/icons'
 
 
 export let UsersFilterForm = (props) => {
 
+    let {Option} = Select
+
     return (
-        <div>
+        <div style={{width: 300}}>
             <Formik
                 initialValues={{ term: '', friend: '' }}
 
@@ -17,15 +21,16 @@ export let UsersFilterForm = (props) => {
             >
                 {({ isSubmitting }) => (
                     <Form>
-                        <Field type="input" name="term" />
-                        <Field as="select" name="friend">
-                            <option value='null'>all</option>
-                            <option value="true">only followed</option>
-                            <option value='false'>only unfollowed</option>
-                        </Field>
-                        <button type="submit" disabled={isSubmitting}>
+                        <Input placeholder="find users..." type="input" name="term" />
+  
+                        <Select defaultValue={null} style={{width: 150}} name="friend">
+                            <Option value='null'>all</Option>
+                            <Option value="true">only followed</Option>
+                            <Option value='false'>only unfollowed</Option>
+                        </Select>
+                        <SubmitButton type="primary" icon={<SearchOutlined />} disabled={isSubmitting}>
                             search
-                        </button>
+                        </SubmitButton>
                     </Form>
                 )}
             </Formik>

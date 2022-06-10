@@ -18,7 +18,7 @@ let MyPosts = (props) => {
     }
 
     return (
-        <div>
+        <div style={{width: 350}}>
             <div>
                 My posts
                 <textarea onChange={newPost} ref={newPostElement} value={props.newPostText} />
