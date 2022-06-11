@@ -1,10 +1,10 @@
+
 // @ts-ignore
-import { responseCodes, usersAPI } from './../api/api.ts';
+import { usersAPI, APIResponseType  } from './../api/api.ts';
 import { ActionTypes, AppStateType } from './redux-store';
 import { ThunkAction } from 'redux-thunk';
 import { usersType } from '../types/types';
 import { Dispatch } from 'redux';
-import { initAPIResponseType } from '../api/api';
 
 export const actions = {
     followAC: (userId: number) => ({ type: 'FOLLOW', userId } as const),
@@ -14,7 +14,7 @@ export const actions = {
     setUsersCountAC: (totalCount: number) => ({ type: 'SETUSERSCOUNT', totalCount } as const),
     toggleIsFetchingAC: (isFetching: boolean) => ({ type: 'TOGGLEISFETCHING', isFetching } as const),
     followingInProgressAC: (isProgress: boolean, userId: number) => ({ type: 'FOLLOWINGISPROGRESS', isProgress, userId } as const),
-    setFilterAC: (term: string, friend: string | null) => ({type: 'SET_USERS_FILTER', term, friend} as const)
+    setFilterAC: (term: string, friend: string | null) => ({ type: 'SET_USERS_FILTER', term, friend } as const)
 }
 
 type initStateType = {
@@ -129,29 +129,29 @@ export const updateUsersThunk = (pageNumber: number, pageSize: number): thunkTyp
     }
 }
 
-const _followUnfollowFlow = async (dispatch: Dispatch<actionsTypes>, userId: number,
-    apiMethod: (userId: number) => Promise<initAPIResponseType>, 
-    actionCreatore: (userId: number) => actionsTypes) => {
+const _followUnfollowFlow = async (dispatch: Dispatch<actionsTypes>,
+                                            userId: number,
+                                            apiMethod: (userId: number) => Promise<APIResponseType>,
+                                            actionCreator: (userId: number) => actionsTypes) => {
 
-        dispatch(actions.followingInProgressAC(true, userId))
+    dispatch(actions.followingInProgressAC(true, userId))
 
-        let response = await apiMethod(userId)
-        debugger
-        if (response.resultCode === 0) {
-            dispatch(actionCreatore(userId))
-        }
-
-        dispatch(actions.followingInProgressAC(false, userId))
+    let response = await apiMethod(userId)
+    if (response.resultCode === 0) {
+        dispatch(actionCreator(userId))
     }
+
+    dispatch(actions.followingInProgressAC(false, userId))
+}
 
 export const followUserThunk = (userId: number): thunkType => {
     return async (dispatch: dispatchType) => {
-        _followUnfollowFlow(dispatch, userId, usersAPI.deleteFollow.bind(usersAPI), actions.followAC)
+        _followUnfollowFlow(dispatch, userId, usersAPI.deleteFollow.bind(usersAPI), actions.unfollowAC)
     }
 }
 
 export const unfollowUserThunk = (userId: number): thunkType => {
     return async (dispatch: dispatchType) => {
-        _followUnfollowFlow(dispatch, userId, usersAPI.postFollow.bind(usersAPI), actions.unfollowAC)
+        _followUnfollowFlow(dispatch, userId, usersAPI.postFollow.bind(usersAPI), actions.followAC)
     }
 }

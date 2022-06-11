@@ -4,13 +4,25 @@ import preloaderImg from '../../images/preloader.gif'
 import userDefaultImage from '../../images/user.png'
 import { ProfileStatus } from "./Status"
 import { getProfile } from '../../selectors/profileSelector'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { savePhoto } from '../../redux/profile-reducer.ts'
+import { useParams } from 'react-router-dom'
 
 
-let CurrentUser = (props) => {
-
-
+let CurrentUser = () => {
     const profile = useSelector(getProfile)
+
+    let params = useParams()
+    const isOwner = !params.id
+
+    const dispatch = useDispatch()
+
+    const savePhotoFunction = (file) => {
+        return dispatch(savePhoto(file))
+    }
+    const onMainPhotoSelected = (e) => {
+        savePhotoFunction(e.target.files[0])
+    }
 
 
     let imgSrc;
@@ -24,8 +36,13 @@ let CurrentUser = (props) => {
 
     return (
         <div className={s.CurrentUserInfo}>
+            <div>
+            {isOwner && <input onChange={onMainPhotoSelected} type='file' />}
+            </div>
+
             <img src={imgSrc} />
-            <ProfileStatus isOwner={props.isOwner}/>
+
+            <ProfileStatus isOwner={isOwner} />
         </div>)
 }
 

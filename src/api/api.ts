@@ -9,6 +9,13 @@ const instance = axios.create({
     }
 
 })
+
+export type APIResponseType<D = {}, RC = responseCodes> = {
+    data: D
+    messages: Array<string>
+    resultCode: RC
+}
+
 export type initAPIResponseType = {
     resultCode: number
     messages: []

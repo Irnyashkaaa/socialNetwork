@@ -2,14 +2,14 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 // @ts-ignore
-import { setUserProfile, getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto } from '../../redux/profile-reducer.ts';
-import {CurrentUser} from './Profile'
+import { getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto } from '../../redux/profile-reducer.ts';
+import { CurrentUser } from './Profile'
 import { useParams } from 'react-router-dom';
 // @ts-ignore
 import { authAPI } from '../../api/api.ts';
 import { WithAuthRedirect } from '../../hoc/AuthRedirect'
 // @ts-ignore
-import {profileType} from '../../types/types.ts'
+import { profileType } from '../../types/types.ts'
 import { getIsAuth, getProfile, getStatus } from '../../selectors/profileSelector';
 
 type mapStateToPropsType = {
@@ -17,13 +17,13 @@ type mapStateToPropsType = {
     isAuth: boolean
     status: string
 }
-type mapDispatchToProps = {
+type mapDispatchToPropsType = {
     getCurrentUserThunk: (id: number) => void
     getStatusThunk: (id: number) => void
     savePhoto: () => void
     updateStatusThunk: () => void
 }
-type propsType = mapStateToPropsType  & mapDispatchToProps
+type propsType = mapStateToPropsType & mapDispatchToPropsType
 
 let mapStateToProps = (state: any): mapStateToPropsType => {
     return ({
@@ -54,19 +54,22 @@ let CurrentUserContainer: React.FC<propsType> = (props) => {
                 })
 
         }
-    }, [])
+    }, [params.id])
 
     return (
 
         <div>
-            <CurrentUser savePhoto={props.savePhoto} {...props} 
-                        isOwner={!params.id} 
-                        profile={props.profile} 
-                        status={props.status}
-                         updateStatus={props.updateStatusThunk} />
+            <CurrentUser savePhoto={props.savePhoto} {...props}
+                isOwner={!Number(params.id)}
+                profile={props.profile}
+                status={props.status}
+                updateStatus={props.updateStatusThunk}
+                isAuth={props.isAuth} />
         </div>
     )
 }
-let CurrentUserContainerr = WithAuthRedirect(CurrentUserContainer)
 
-export default connect<mapStateToPropsType, mapDispatchToProps>(mapStateToProps, { getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto })(CurrentUserContainerr)
+let DialogsContainer = connect<mapStateToPropsType, mapDispatchToPropsType>(mapStateToProps,
+     { getCurrentUserThunk, getStatusThunk, updateStatusThunk, savePhoto })(WithAuthRedirect(CurrentUserContainer))
+
+export default DialogsContainer

@@ -1,6 +1,7 @@
 import { Formik } from 'formik'
 import { Form, Input, SubmitButton } from 'formik-antd'
 import React, { useEffect, useState } from 'react'
+import defaulImage from '../../images/user.png'
 
 
 const ChatPage: React.FC = () => {
@@ -49,7 +50,7 @@ const Messages: React.FC = () => {
             {messages.map(m => {
                 return (
                     // @ts-ignore
-                    <Message message={m.message} photo={m.photo} userId={m.userId} userName={m.userName} />
+                    <Message message={m.message} photo={m.photo || defaulImage} userId={m.userId} userName={m.userName} />
                 )
             })}
         </div>

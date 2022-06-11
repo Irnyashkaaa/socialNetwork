@@ -11,18 +11,9 @@ export let CurrentUser = () => {
     let params = useParams()
     const isOwner = !params.id
 
-    const dispatch = useDispatch()
-
-    const savePhotoFunction = (file) => {
-        return dispatch(savePhoto(file))
-    }
-    const onMainPhotoSelected = (e) => {
-        savePhotoFunction(e.target.files[0])
-    }
-
     return (
         <div>
-            {isOwner && <input onChange={onMainPhotoSelected} type='file' />}
+
             <div className='currentUser'>
                 <CurrentUserInfo isOwner={isOwner}/>
                 <MyPostsContainer />
